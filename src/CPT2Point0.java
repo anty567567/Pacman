@@ -16,6 +16,8 @@ public class CPT2Point0 extends JPanel implements KeyListener {
     public Rectangle[][] mapRects = new Rectangle[19][19], pelletRects = new Rectangle[19][19], menuRects = new Rectangle[19][19], ghostDirectionRects = new Rectangle[19][19];
     public int[] mouthRightX = {0, 0, 0}, mouthRightY = {0, 0, 0};
     public boolean play = false;
+    
+    //The tile maps for the menu screen and game
     public int[][] map = {
             {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
             {3, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3},
@@ -98,7 +100,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         setFocusTraversalKeysEnabled(false);
         pacMan.setPreferredSize(new Dimension(688, 720));
         pacMan.pack();
-
+        
         initializeMap(menuRects, menu);
         while (!play) {
             checkCollisions(menuRects, menu);
@@ -120,6 +122,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         }
     }
 
+    //moves the character up
     public void moveUp() {
         down = false;
         right = false;
@@ -132,6 +135,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         consumer.y -= yVelocity;
     }
 
+    //moves the character down
     public void moveDown() {
         up = false;
         left = false;
@@ -144,6 +148,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         consumer.y += yVelocity;
     }
 
+    //moves the character left
     public void moveLeft() {
         right = false;
         up = false;
@@ -156,6 +161,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         consumer.x -= xVelocity;
     }
 
+    //moves the character right
     public void moveRight() {
         left = false;
         up = false;
@@ -168,6 +174,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         consumer.x += xVelocity;
     }
 
+    //These methods stop movement when there is a wall the player is going against
     public void stopWhenCollidingLeft() {
         left = false;
         somethingToLeft = true;
@@ -188,6 +195,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         somethingToDown = true;
     }
 
+    //These methods move the ghost in the pressed direction
     public void moveUpGhost() {
         downGhost = false;
         rightGhost = false;
@@ -232,6 +240,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         bottomSideGhost.x += xVelocity;
     }
 
+    //These methods stop the ghost's movement when going against a wall
     public void stopWhenCollidingLeftGhost() {
         leftGhost = false;
         somethingToLeftGhost = true;
@@ -252,6 +261,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         somethingToDownGhost = true;
     }
 
+    //creates a 2D array of rectangles based off of the tile maps to act as the hitboxes for the walls and pellets
     public void initializeMap(Rectangle[][] rectangles, int[][] arrayMap) {
         for (int i = 0; i < rectangles.length; i++) {
             for (int j = 0; j < rectangles[i].length; j++) {
@@ -264,6 +274,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         }
     }
 
+    //checks the wanted direction of movement
     public void playerMovement() {
         if (up) {
             moveUp();
@@ -288,6 +299,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         }
     }
 
+    //stops movement when against a wall or recognizes the picking up of a pellet
     public void checkCollisions(Rectangle[][] rectangles, int[][] arrayMap) {
         somethingToLeft = false;
         somethingToRight = false;
@@ -320,6 +332,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         }
     }
 
+    //initializes all start values
     public void startGame() {
         play = true;
         player.x = 9 * size + 1;
@@ -341,6 +354,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         down = false;
     }
 
+    //determines if there are pellets remaining in the game
     public boolean checkPelletsLeft() {
         boolean gameOver;
         for (int i = 0; i < map.length; i++) {
@@ -353,6 +367,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         return false;
     }
 
+    //These methods attempt movement in a direction if there is no wall there
     public void tryMovement() {
         if (tryLeft && !somethingToLeft) {
             left = true;
@@ -430,6 +445,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
         }
     }
 
+    //transports the player between the tunnels at the sides of the screen
     public void checkTunnel() {
 
         if (rightSide.x <= 2 && left) {
@@ -468,6 +484,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
 
     }
 
+    //removes pellets from the screen and adds points
     public void eatPellet(int i, int j) {
         pelletRects[i][j] = null;
         map[i][j] = 0;
@@ -485,6 +502,7 @@ public class CPT2Point0 extends JPanel implements KeyListener {
 
     }
 
+    //all graphics for the game
     protected void paintComponent(Graphics g) {
         super.paintComponents(g);
         if (play && checkPelletsLeft()) {
